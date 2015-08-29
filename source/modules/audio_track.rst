@@ -5,23 +5,23 @@
 Audio Track for HTTP Live Streaming
 ===================================
 
-This nginx module generates audio track for hls streams on the fly.
+This NGINX module generates an audio track for HTTP Live Streaming (HLS) streams on the fly.
 
 Available on :github:`GitHub <flavioribeiro/nginx-audio-track-for-hls-module>`
 
 Why?
 ----
 
-Apple HTTP Live Streaming (HLS) has being adopted for almost all video stream players, and one of their recommendations is to serve an audio-only track to users that have experiencing bad bandwidth connections.
+Apple HTTP Live Streaming (HLS) has been adopted on almost all video stream players, and one of Apple's recommendations is to serve an audio-only track to users who are experiencing bad performance because of bandwidth limitations.
 
-This module aims to serve audio-only track directly on nginx, without the necessity to pre-demux the stream on Video On Demand (VoD) scenarios or the overhead and occupation of one stream output on the encoder side for live streams.
+This module aims to serve the audio-only track directly on NGINX, without the need to pre-demux the stream on video-on-demand (VoD) scenarios, or the overhead and occupation of one stream output on the encoder side for live streams.
 
 How?
 ----
 
-Using a combination of nginx locations with simple scripts written in Lua and this module, it's possible to generate the entire audio track on Nginx. Look at how things are done.
+Using a combination of NGINX locations with simple scripts written in Lua and this module, it's possible to generate the entire audio track on NGINX. Look at how things are done.
 
-A viewer requests the master playlist, and the response is modified. A simple lua script gets the first stream of the list and add an audio-playlist at the end:
+A viewer requests the master playlist, and the response is modified. A simple Lua script gets the first stream of the list and adds an audio playlist at the end:
 
 .. code-block:: nginx
 
@@ -39,7 +39,7 @@ A viewer requests the master playlist, and the response is modified. A simple lu
       ';
   }
 
-Then, when user's connection goes bad and he needs to go to the audio target, another location will handle the request, getting the original (video) playlist and changing the extension of the chunks:
+Then, when the user's connection goes bad and he needs to go to the audio target, another location handles the request, getting the original (video) playlist and changing the extension of the chunks:
 
 .. code-block:: nginx
 
@@ -53,7 +53,7 @@ Then, when user's connection goes bad and he needs to go to the audio target, an
       ';
   }
 
-Every request for ``.aac`` extensions will invoke audio extract module:
+Every request for ``.aac`` extensions will invoke the audio track module:
 
 .. code-block:: nginx
 
@@ -68,12 +68,12 @@ That's it!
 Status
 ------
 
-This module is under heavy development. Feedbacks, issues and patches are welcome.
+This module is under heavy development. Feedback, issues, and patches are welcome.
 
 Requirements
 ------------
 
-This module depends from some libraries (headers and shared objects) which has to be installed before it, all are commonly distributed with `FFmpeg <http://ffmpeg.org>`_:
+This module depends from some libraries (headers and shared objects) which have to be installed before it. All are commonly distributed with `FFmpeg <http://ffmpeg.org>`_:
 
 * avformat >= 55.0.0 (tested version: 55.0.0)
 * avcodec >= 55.3.0 (tested version: 55.3.0)
@@ -104,16 +104,16 @@ Follow the steps:
 
     $ git clone git://github.com/chaoslawful/lua-nginx-module.git
 
-* Download nginx and compile it using both modules:
+* Download NGINX and compile it using both modules:
 
   .. code-block:: bash
 
     $ ./configure --add-module=/path/to/nginx-audio-track-for-hls-module --add-module=/path/to/lua-nginx-module
     $ make install
 
-Now you can look at our :github:`nginx configuration example <flavioribeiro/nginx-audio-track-for-hls-module/blob/master/nginx.conf>` and make your changes. Have fun!
+Now you can look at our :github:`NGINX configuration example <flavioribeiro/nginx-audio-track-for-hls-module/blob/master/nginx.conf>` and make your changes. Have fun!
 
 .. warning::
 
-   It's highly recommended to use caching in all locations of HLS, in special the one that returns the generated ``.aac``.
+   It's highly recommended to use caching in all locations of HLS, in particular the one that returns the generated ``.aac``.
 
