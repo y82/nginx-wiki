@@ -39,7 +39,7 @@ Early-Access to nginScript
 
 nginScript is available as an early-access project.  It’s an external module of alpha quality, and the features and configuration syntax are likely to change as we develop the implementation and incorporate your feedback.  Please use at your own risk, but we’d love to get your feedback and ideas.
 
-Section 2: Installing the nginScript module
+Section 2: Installing the nginScript modules
 -------------------------------------------------
 
 Installation instructions:
@@ -47,18 +47,27 @@ Installation instructions:
 .. code-block:: bash
 
   # Obtain the latest source for NGINX from http://nginx.org/en/download.html
-  $ wget http://nginx.org/download/nginx-1.9.4.tar.gz
-  $ tar -xzvf nginx-1.9.4.tar.gz
+  $ wget http://nginx.org/download/nginx-1.11.6.tar.gz
+  $ tar -xzvf nginx-1.11.6.tar.gz
 
   # Obtain the development sources for nginScript
   $ hg clone http://hg.nginx.org/njs
 
+  # Configure NGINX
+  $ cd nginx-1.11.6
+  $ ./configure --add-module=../njs/nginx --prefix=/your/installation/directory  # for static nginScript modules
+  # or
+  $ ./configure --add-dynamic-module=../njs/nginx  # for dynamic nginScript modules
+      
   # Build and install NGINX
-  $ cd nginx-1.9.4
-  $ ./configure --add-module=../njs/nginx --prefix=/your/installation/directory
   $ make
   $ make install
-
+  
+  # Enable nginScript dynamic modules in NGINX configuration file
+  
+    load_module modules/ngx_http_js_module.so;
+    load_module modules/ngx_stream_js_module.so;
+  
 For more details on compiling NGINX and third-party modules, please refer to http://nginx.org/en/docs/configure.html 
 
 Section 3: Getting Started with nginScript
